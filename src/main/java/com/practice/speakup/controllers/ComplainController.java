@@ -5,6 +5,7 @@ import com.practice.speakup.dtos.ComplainResponse;
 import com.practice.speakup.handlers.GlobalResponseHandler;
 import com.practice.speakup.services.ComplainService;
 import com.practice.speakup.services.PDFGenerateService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class ComplainController {
     private ComplainService complainService;
 
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<GlobalResponseHandler<ComplainResponse>> create(){
+    public ResponseEntity<GlobalResponseHandler<ComplainResponse>> create(@Valid @RequestBody ComplainRequest request){
         try{
             ComplainResponse response = complainService.createComplain(request);
             return GlobalResponseHandler.successResponse("Complain created successfully", response, HttpStatus.OK.value());

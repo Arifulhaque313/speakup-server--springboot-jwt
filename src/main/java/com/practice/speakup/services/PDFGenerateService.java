@@ -3,8 +3,10 @@ package com.practice.speakup.services;
 import com.practice.speakup.dtos.ComplainResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import javax.naming.Context;
 import java.io.ByteArrayOutputStream;
 
 @Service
@@ -22,12 +24,12 @@ public class PDFGenerateService {
 
         String htmlContent = templateEngine.process("complain_template", context);
 
-        ITextRendered rendered = new ITextRenderer();
+        ITextRenderer renderer = new ITextRenderer();
         renderer.setDocumentFromString(htmlContent);
         renderer.layout();
 
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
-            rendered.createPDF(outputStream);
+            renderer.createPDF(outputStream);
             return outputStream.toByteArray();
         }
     }

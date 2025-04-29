@@ -41,9 +41,9 @@ public class ComplainService {
 
     public List<ComplainResponse> getUserComplains(){
         User user = getCurrentUser();
-        return complainRepository.findByUser()
+        return complainRepository.findByUser(user)
                 .stream()
-                .map(this::mapTOResponse)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
