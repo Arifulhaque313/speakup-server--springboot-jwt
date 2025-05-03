@@ -26,6 +26,7 @@ public class ComplainController {
     private ComplainService complainService;
 
     @PreAuthorize("hasRole('USER')")
+    @PostMapping
     public ResponseEntity<GlobalResponseHandler<ComplainResponse>> create(@Valid @RequestBody ComplainRequest request){
         try{
             ComplainResponse response = complainService.createComplain(request);
@@ -37,7 +38,8 @@ public class ComplainController {
 
 
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<GlobalResponseHandler<List<ComplainResponse>>> getUserComplains(@PathVariable Long id){
+    @GetMapping
+    public ResponseEntity<GlobalResponseHandler<List<ComplainResponse>>> getUserComplains(){
         try{
             List<ComplainResponse> complains = complainService.getUserComplains();
             return GlobalResponseHandler.successResponse("User Complain fetch Successfull", complains, HttpStatus.OK.value());
@@ -59,7 +61,7 @@ public class ComplainController {
 
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<GlobalResponseHandler<ComplainResponse>> updateComplains(@PathVariable Long id, @RequestBody ComplainRequest request){
         try{
             ComplainResponse response = complainService.updateComplain(id, request);
@@ -71,7 +73,7 @@ public class ComplainController {
 
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<GlobalResponseHandler<String>> delete(@PathVariable Long id){
         try{
             complainService.deleteComplain(id);

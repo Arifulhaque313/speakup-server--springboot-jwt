@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<html xmlns:th="http://www.thymelead.org" xmlns="http://www/w3.org/1999/xhtml">-->
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Complain Details - PDF</title>
 
 <style>
@@ -68,26 +69,26 @@
     Complain Request Details
 </h1>
 
-<div>
+<div class="complain-details">
     <table>
         <tr>
             <th>Complainer Name</th>
-            <td th:text = "${complain.name}"></td>>
+            <td th:text = "${complain.name}"></td>
         </tr>
 
         <tr>
             <th>Complain ID</th>
-            <td th:text = "${complain.id}">1</td>>
+            <td th:text = "${complain.id}">1</td>
         </tr>
 
         <tr>
             <th>Complainer Title</th>
-            <td th:text = "${complain.title}"></td>>
+            <td th:text = "${complain.title}"></td>
         </tr>
 
         <tr>
             <th>Description</th>
-            <td th:text = "${complain.description}"></td>>
+            <td th:text = "${complain.description}"></td>
         </tr>
     </table>
 </div>

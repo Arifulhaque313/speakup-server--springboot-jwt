@@ -58,6 +58,9 @@ public class ComplainService {
         User currentUser = getCurrentUser();
         Complain complain = complainRepository.findByIdAndUser(id, currentUser)
                 .orElseThrow(() -> new RuntimeException("Complain not found or dose not belongs to the user"));
+
+        complain.setTitle(request.getTitle());
+        complain.setDescription(request.getDescription());
         return mapToResponse(complainRepository.save(complain));
     }
 

@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/register", "/auth/login", "/api/v1/public/**", "/v3/**", "/swagger-ui/**").permitAll()
-                .requestMatchers("/api/v1/user").hasRole("USER")
+                .requestMatchers("/api/v1/user", "/api/v1/**").hasRole("USER")
                 .requestMatchers("/api/v1/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
