@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,31 +34,53 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+//        AuthenticationManagerBuilder authBuilder =
+//                http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authBuilder.userDetailsService(customUserDetailsService)
+//                .passwordEncoder(passwordEncoder());
+//        return authBuilder.build();
+//    }
+
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        authBuilder.userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
-        return authBuilder.build();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+        return config.getAuthenticationManager();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .cors()
-                .configurationSource(corsConfigurationsource())
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login", "/api/v1/public/**", "/v3/**", "/swagger-ui/**").permitAll()
-                .requestMatchers("/api/v1/user", "/api/v1/**").hasRole("USER")
-                .requestMatchers("/api/v1/admin").hasRole("ADMIN")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().disable();
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//                .cors()
+//                .configurationSource(corsConfigurationsource())
+//                .and()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/auth/register", "/auth/login", "/api/v1/public/**", "/v3/**", "/swagger-ui/**").permitAll()
+//                .requestMatchers("/api/v1/user", "/api/v1/**").hasRole("USER")
+//                .requestMatchers("/api/v1/admin").hasRole("ADMIN")
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin().disable();
+//
+//        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
+//    }
 
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationsource()))
+                .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/auth/register", "/auth/login", "/api/v1/public/**", "/v3/**", "/swagger-ui/**").permitAll()
+                    .requestMatchers("/api/v1/user", "/api/v1/**").hasRole("USER")
+                    .requestMatchers("/api/v1/admin").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+                )
+                .formLogin(form -> form.disable())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return  http.build();
     }
 
     @Bean
